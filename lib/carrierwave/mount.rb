@@ -291,8 +291,10 @@ module CarrierWave
         uploader.cache!(new_file)
         @integrity_error = nil
         @processing_error = nil
-        write_identifier
-        store!
+        unless @record.new_record?
+          write_identifier
+          store!
+        end
       rescue CarrierWave::IntegrityError => e
         @integrity_error = e
         raise e unless option(:ignore_integrity_errors)
